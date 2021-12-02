@@ -1,0 +1,5 @@
+.gitgnore
+.git/
+__pycache__/
+.idea/
+12.wav
