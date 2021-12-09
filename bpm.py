@@ -3,6 +3,12 @@
 import matplotlib.pyplot as plt
 import aubio
 import stats
+import time
+import librosa
+import numpy
+import IPython.display as ipd
+
+import librosa.display
 
 
 def print_audio_track(audio_file):
@@ -38,23 +44,57 @@ def init_plage_bpm(bpm_debut, bpm_fin, pas):
     return plage_bpm
         
 
-def calcul_bpm(son, fs, pas_fin = 0.05, bpm_debut = 85, bpm_fin = 160, pas_grossier = 1):
+def calcul_bpm2(src, fs, pas_fin = 0.05, bpm_debut = 85, bpm_fin = 160, pas_grossier = 1):
     """
     Calcule le BPM.
     """
     pas = pas_grossier
     trouve_grossier = False
     trouve_bpm = False
+    son, read = src()
     while not(trouve_bpm):
         # Plage de BPM à parcourir :
         plage_bpm = init_plage_bpm(bpm_debut, bpm_fin, pas)
-        print("Plage de BPM : ",plage_bpm)
+        decalage = [4./i*60*fs for i in plage_bpm]
+        correl = [0 for i in range(len(decalage))]
+        start_time = time.time()
+        print("Parcours de la plage " + str(bpm_debut) + " : " + str(bpm_fin) + " en allant de "+str(pas) + " en "+str(pas) + " : ")
+        print("Calcul de " + str(len(decalage)) + " autocorrélations en cours sur des vecteurs de taille " + str(len(son) - decalage[-1]))
+
+        for i in range(0, len(decalage)):
+            decal = int(decalage[i])
+            extrait2 = son[min(1 + decal, son[-1])]
+            print(decal, decalage[i])
         exit()
+
+def calcul_bpm(audio, fs, pas_fin = 0.05, bpm_debut = 85, bpm_fin = 160, pas_grossier = 1):
+    """
+    Calcule le BPM.
+    """
+    print("Calcul du BPM en cours . . .")
+    x, sr = librosa.load(audio)
+    src = aubio_object(fs)
+    x2, sr2 = src()
+    tempo = librosa.beat.tempo(x, sr=sr)
+    time_start = time.time()
+    tempo2 = librosa.beat.tempo(x2, sr=sr2)
+    bpm = tempo2[0]*0.8
+    duree = time.time() - time_start
+    print("Vrai BPM : ", tempo[0])
+    print("BPM de l'arnaque : ", bpm)
+    print("Temps de calcul : " + str(duree) + "s")
+
+    T = len(x2)/float(sr2)
+    seconds_per_beat = 60.0/bpm
+    beat_times = numpy.arange(0, T, seconds_per_beat)
+    clicks = librosa.clicks(beat_times, sr, length=len(x))
+    ipd.Audio(x + clicks, rate=sr)
 
 # TODO : demander à l'utilisateur de choisir un fichier ou prendre en compte le paramètre pris en compte
 if __name__=="__main__":
-    audio_file = "Never Gonna Give You Up.mp3"
-    calcul_bpm(aubio_object(audio_file), 1)
+    audio_file2 = "Never Gonna Give You Up.mp3"
+    audio_file = "12.wav"
+    calcul_bpm(audio_file, audio_file2)
 """
 TODO : calculer le BPM
 Ça marche pas du tout ptdr
