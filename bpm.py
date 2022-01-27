@@ -1,9 +1,12 @@
-#coding: utf-8
 
 import librosa
 from librosa import core
 from librosa.feature import tempogram
 import numpy as np
+import sys
+import os
+import tkinter as tk
+
 
 def calcul_bpm(file_path):
     x, sr = librosa.load(file_path)
@@ -11,7 +14,7 @@ def calcul_bpm(file_path):
     bpm_initial = 120
 
     win_length = core.time_to_frames(8.0, sr = sr, hop_length = 512).item()
-    
+
     tg = tempogram(y=x, sr=sr, onset_envelope=None, hop_length = 512, win_length=win_length)
     tg = np.mean(tg, axis=1, keepdims = True)
 
@@ -25,4 +28,17 @@ def calcul_bpm(file_path):
 
     return bpms[best_period][0]
 
-print("BPM calculé : ", calcul_bpm("12.wav"))
+
+if __name__ == "__main__":
+    cwd = os.getcwd()
+    len_arguments = len(sys.argv)
+    if len_arguments > 1:
+        file = sys.argv[1]
+    else:
+        root = tk.Tk()
+        root.withdraw()
+        entry = tk.filedialog.askopenfile(initialdir=cwd)
+        file = entry.name
+
+    print("BPM calculé : ", calcul_bpm("12.wav"))
+
