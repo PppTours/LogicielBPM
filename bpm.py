@@ -1,4 +1,3 @@
-
 import librosa
 from librosa import core
 from librosa.feature import tempogram
@@ -22,7 +21,12 @@ def is_not_wav(file_path):
 
 
 def get_offset(file_path) :
-    print()
+    x, sr = librosa.load(file_path)
+    i = 0
+    coeff = 22.15 # 22.15 elements represents 1 millisecond
+    while x[i] == 0:
+        i += 1
+    return i / coeff
 
 
 def calcul_bpm(file_path):
@@ -58,7 +62,5 @@ if __name__ == "__main__":
         file = entry.name
     if is_not_wav(file):
         file = convert_mp3_to_wav(file)
+    print("Offset : ", get_offset(file), " ms")
     print("BPM calculé : ", calcul_bpm(file))
-
-
-
