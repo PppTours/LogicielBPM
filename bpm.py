@@ -26,7 +26,7 @@ def get_offset(file_path) :
     coeff = 22.15 # 22.15 elements represents 1 millisecond
     while x[i] == 0:
         i += 1
-    return i / coeff
+    return round(i / coeff)
 
 
 def calcul_bpm(file_path):
