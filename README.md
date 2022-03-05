@@ -13,7 +13,10 @@ Nous utilisons aussi les librairies sys, os, tkinter et pydub, mais elles sont d
 
 ``pip install librosa``
 
-``pip install numpy``
+``pip install numpy==1.21``
+
+Enfin, il faut télécharger ffmpeg et le mettre dans un répertoire reconnu comme variable d'environnement. Commencez par télécharger ffmpeg sur le lien suivant : https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z. Dézippez l'archive et dans le fichier ffmpeg/bin, copiez les 3 éléments (ffmpeg.exe, ffplay.exe et ffprobe.exe). Allez ensuite dans un répertoire correspondant à votre variable d'environnement (si vous ne connaissez pas ces répertoires, tapez "variable d'environnement" dans la barre de recherche Windows, vous trouverez rapidement) et collez les 3 éléments.
+
 
 ## Guide d'utilisation
 
@@ -43,5 +46,15 @@ Paramètre : file_path : chemin d'un fichier .wav
 
 Retourne : le BPM du fichier
 
+## Assistance
+### ImportError : Numba needs NumPy 1.21 or less
+Si vous avez cette erreur, c'est que votre version de numpy est trop récente. Pour cela, utilisez la commande suivante : 
+``pip install numpy==1.21``
 
+### warn("Couldn't find ffprobe or avprobe - defaulting to ffprobe, but may not work", RuntimeWarning)
+Il faut télécharger ffmpeg et le mettre dans un répertoire reconnu comme variable d'environnement. Commencez par télécharger ffmpeg sur le lien suivant : https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-essentials.7z. Dézippez l'archive et dans le fichier ffmpeg/bin, copiez les 3 éléments (ffmpeg.exe, ffplay.exe et ffprobe.exe). Allez ensuite dans un répertoire correspondant à votre variable d'environnement (si vous ne connaissez pas ces répertoires, tapez "variable d'environnement" dans la barre de recherche Windows, vous trouverez rapidement) et collez les 3 éléments.
 
+## Nous contacter
+En cas de soucis qui ne figure pas sur cette assistance, voici nos coordonnées pour nous contacter :
+- Bastien Camembert : bastien.camembert@etu.univ-tours.fr ou Camemba#2303 sur Discord
+- Thomas Ciron : thomas.ciron@etu.univ-tours.fr ou Gueriyox#3697
